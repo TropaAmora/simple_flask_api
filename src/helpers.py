@@ -28,3 +28,4 @@ def handle_errors(f):
                 'status': 'error'
             }), HTTPStatus.INTERNAL_SERVER_ERROR
     return wrapper
+

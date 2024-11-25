@@ -17,14 +17,18 @@ CLASS_REF_COUNTER = 0
 @app.route('/api/v1/create_student', methods=['POST'])
 @handle_errors
 def create_student() -> Tuple[Dict[str, Any], int]:
-    # Get student info from query parameters
-    STUDENT_REF_COUNTER += 1
-    student_ref = STUDENT_REF_COUNTER
-    student_name = request.args.get('student_name')
-    student_level = request.args.get('student_level')
-    student_bd = request.args.get('student_bd')
+    # Get JSON data from the request body
+    data = request.get_json()
 
-    if not student_name or student_level or student_bd:
+    # Get student info from query parameters
+    #STUDENT_REF_COUNTER += 1
+    #student_ref = STUDENT_REF_COUNTER
+    student_ref = 1
+    student_name = data.get('student_name')
+    student_level = data.get('student_level')
+    student_bd = data.get('student_bd')
+
+    if not (student_name and student_level and student_bd):
         return(jsonify({
             'error': 'student_name, student_level and student_bd is required',
             'status': 'error'
@@ -33,7 +37,7 @@ def create_student() -> Tuple[Dict[str, Any], int]:
     student = Student(
         ref=student_ref,
         name=student_name,
-        level=student_level,
+        level=int(student_level),
         birthday_date=student_bd
     )
 
@@ -50,13 +54,16 @@ def create_student() -> Tuple[Dict[str, Any], int]:
 @app.route('//api/v1/create_class', methods=['POST'])
 @handle_errors
 def create_class() -> Tuple[Dict[str, Any], int]:
+    # Get JSON data from the request body
+    data = request.get_json()
+
     # Get class attributes from query params
     CLASS_REF_COUNTER += 1
     class_ref = CLASS_REF_COUNTER
-    class_level = request.args.get('class_level')
-    class_day_date = request.args.get('class_day_date')
-    class_start_time = request.args.get('class_start_time')
-    class_end_time = request.args.get('class_end_time')
+    class_level = data.get('class_level')
+    class_day_date = data.get('class_day_date')
+    class_start_time = data.get('class_start_time')
+    class_end_time = data.get('class_end_time')
 
     if not class_level or class_day_date or class_start_time or class_end_time:
         return jsonify({
@@ -86,7 +93,7 @@ def create_class() -> Tuple[Dict[str, Any], int]:
 @handle_errors
 def get_students() -> Tuple[Dict[str, Any], int]:
     # Get class from query parameters to query the students in that class
-    class_id = int(request.args.get('class_id'))
+    class_id = str(request.args.get('class_id'))
 
     if not class_id:
         return jsonify({
@@ -96,7 +103,7 @@ def get_students() -> Tuple[Dict[str, Any], int]:
     
     if not validate_class_id(class_id=class_id):
         return jsonify({
-            'error': 'student_id not found',
+            'error': 'class_id not found',
             'status': 'error'
         }), HTTPStatus.BAD_REQUEST
     
