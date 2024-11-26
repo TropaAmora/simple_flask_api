@@ -10,10 +10,10 @@ def validate_date_format(date_string: str) -> bool:
     except ValueError:
         return False
     
-def validate_class_id(class_id: int) -> bool:
+def validate_class_id(class_id: str) -> bool:
     """Function that validates student ids"""
     if class_id not in ['class21']:
-        False
+        return False
 
     return True
 

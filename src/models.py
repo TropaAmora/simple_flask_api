@@ -9,7 +9,7 @@ class Student:
     ref: int = field(repr=False)
     name: str 
     level: int
-    birthday_date: Optional[datetime] = field(repr=False)
+    birthday_date: Optional[str] = field(repr=False)
 
     def __post_init__(self):
         pass

@@ -43,7 +43,8 @@ def create_student() -> Tuple[Dict[str, Any], int]:
 
     if not student:
         return jsonify({
-            'error': 'Error creating Student class'
+            'error': 'Error creating Student class',
+            'status': 'error'
         }), HTTPStatus.BAD_REQUEST
 
     return jsonify({
@@ -51,7 +52,7 @@ def create_student() -> Tuple[Dict[str, Any], int]:
         'status': 'success'
     }), HTTPStatus.OK
 
-@app.route('//api/v1/create_class', methods=['POST'])
+@app.route('/api/v1/create_class', methods=['POST'])
 @handle_errors
 def create_class() -> Tuple[Dict[str, Any], int]:
     # Get JSON data from the request body
@@ -65,9 +66,10 @@ def create_class() -> Tuple[Dict[str, Any], int]:
     class_start_time = data.get('class_start_time')
     class_end_time = data.get('class_end_time')
 
-    if not class_level or class_day_date or class_start_time or class_end_time:
+    if not (class_level and class_day_date and class_start_time and class_end_time):
         return jsonify({
-            'error': 'class_level, class_day_date, class_start_time and class_end_time required'
+            'error': 'class_level, class_day_date, class_start_time and class_end_time required',
+            'status': 'error'
         }), HTTPStatus.BAD_REQUEST
 
     class_instance = Class(

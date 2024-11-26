@@ -41,25 +41,25 @@ CONFIG = {
         'result1': {
             'id': 1,
             'name': 'António Alves',
-            'Level': 5,
+            'level': 5,
             'age': 26
         },
         'result2': {
             'id': 2,
             'name': 'Bernardo Terroso',
-            'Level': 1,
+            'level': 1,
             'age': 20
         },
         'result3': {
             'id': 3,
             'name': 'Tomás Pacheco',
-            'Level': 4,
+            'level': 4,
             'age': 30
         },
         'result4': {
             'id': 4,
             'name': 'Pedro Pacheco',
-            'Level': 3,
+            'level': 3,
             'age': 22
         }
     }, 
