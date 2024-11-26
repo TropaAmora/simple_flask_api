@@ -186,5 +186,6 @@ def health_check():
         'version': '1.0.0'
     }), HTTPStatus.OK
 
+# Very important, this ensures it only calls the .run() method when called locally
 if __name__ == '__main__':
     app.run(debug=False)
