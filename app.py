@@ -59,8 +59,8 @@ def create_class() -> Tuple[Dict[str, Any], int]:
     data = request.get_json()
 
     # Get class attributes from query params
-    CLASS_REF_COUNTER += 1
-    class_ref = CLASS_REF_COUNTER
+    # CLASS_REF_COUNTER += 1
+    class_ref = 1
     class_level = data.get('class_level')
     class_day_date = data.get('class_day_date')
     class_start_time = data.get('class_start_time')
