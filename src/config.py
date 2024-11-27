@@ -1,3 +1,5 @@
+# TODO: Add a utf-8 for cofication
+
 CONFIG = {
     'result_classes': {
         'Monday': {
