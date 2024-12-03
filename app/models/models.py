@@ -23,7 +23,7 @@ class Student:
         }
 
 @dataclass
-class Class:
+class PadelClass:
     ref: int = field(repr=False)
     level: int
     day_date: str 

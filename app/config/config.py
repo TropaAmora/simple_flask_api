@@ -1,6 +1,33 @@
-# TODO: Add a utf-8 for cofication
+# TODO: Add a utf-8 for codification
+class Config:
+    """Base config."""
+    SECRET_KEY = 'your-secret-key'
+    FLASK_APP = 'run.py'
+    JSON_SORT_KEYS = False
+    
+class DevelopmentConfig(Config):
+    FLASK_ENV = 'development'
+    DEBUG = True
+    TESTING = False
 
-CONFIG = {
+class ProductionConfig(Config):
+    FLASK_ENV = 'production'
+    DEBUG = False
+    TESTING = False
+
+class TestingConfig(Config):
+    FLASK_ENV = 'testing'
+    TESTING = True
+    DEBUG = True
+
+config_by_name = {
+    'development': DevelopmentConfig,
+    'production': ProductionConfig,
+    'testing': TestingConfig
+}
+
+
+MOCK_DATA = {
     'result_classes': {
         'Monday': {
             '09:00-11:00': 'class1',
