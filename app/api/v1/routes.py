@@ -5,7 +5,7 @@ from typing import Tuple, Dict, Any
 
 from . import api
 from app.helpers.helpers import validate_date_format, handle_errors, validate_class_id
-from app.models.models import PadelClass, Student
+from app.models.models import PadelClass, Student, RecurrentClass
 from app.config.config import MOCK_DATA
 
 
@@ -17,8 +17,6 @@ def create_student() -> Tuple[Dict[str, Any], int]:
     data = request.get_json()
 
     # Get student info from query parameters
-    #STUDENT_REF_COUNTER += 1
-    #student_ref = STUDENT_REF_COUNTER
     student_ref = 1
     student_name = data.get('student_name')
     student_level = data.get('student_level')
@@ -55,26 +53,50 @@ def create_class() -> Tuple[Dict[str, Any], int]:
     data = request.get_json()
 
     # Get class attributes from query params
-    # CLASS_REF_COUNTER += 1
     class_ref = 1
     class_level = data.get('class_level')
     class_day_date = data.get('class_day_date')
+    class_end_date = data.get('class_end_date')
     class_start_time = data.get('class_start_time')
     class_end_time = data.get('class_end_time')
+    class_recurrence = bool(data.get('class_recurrent'))
 
     if not (class_level and class_day_date and class_start_time and class_end_time):
         return jsonify({
             'error': 'class_level, class_day_date, class_start_time and class_end_time required',
             'status': 'error'
         }), HTTPStatus.BAD_REQUEST
+    
+    if (class_recurrence and not class_end_date) or (not class_recurrence and class_end_date):
+        return jsonify({
+            'error': 'Invalid combination of class_recurrence and class_end_date params',
+            'status': 'error'
+        }), HTTPStatus.BAD_REQUEST
 
-    class_instance = PadelClass(
-        ref=class_ref,
-        level=class_level,
-        day_date=class_day_date,
-        start_time=class_start_time,
-        end_time=class_end_time
-    )
+    elif (class_recurrence and class_end_date):
+        class_instance = RecurrentClass(
+            ref=class_ref,
+            level=class_level,
+            day_date=class_day_date,
+            end_date=class_end_date,
+            week_day="Tuesday", # datetime.weekday(class_day_date),
+            start_time=class_start_time,
+            end_time=class_end_time,
+            recurrence=True
+        )
+        class_type = "Recurrent"
+
+    else:
+        class_instance = PadelClass(
+            ref=class_ref,
+            level=class_level,
+            day_date=class_day_date,
+            start_time=class_start_time,
+            end_time=class_end_time
+        )
+        class_type = "One-time only"
+
+
 
     if not class_instance :
         return jsonify({
@@ -84,6 +106,7 @@ def create_class() -> Tuple[Dict[str, Any], int]:
     
     return jsonify({
         'result': class_instance._get_dictionary(),
+        'class_type': class_type,
         'status': 'success'
     }), HTTPStatus.OK
 

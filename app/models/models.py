@@ -41,3 +41,24 @@ class PadelClass:
             'start_time': self.start_time,
             'end_time': self.end_time
         }
+
+@dataclass
+class RecurrentClass(PadelClass):
+    recurrence: bool
+    end_date: str
+    week_day: str
+
+    def __post_init__(self):
+        if not self.recurrence:
+            raise ValueError('recurrence must be True to create RecurrenceClass instance')
+
+    def _get_dictionary(self):
+        return {
+            'ref': self.ref,
+            'level': self.level,
+            'start_date': self.day_date,
+            'end_date': self.end_date,
+            'week_day': self.week_day,
+            'start_time': self.start_time,
+            'end_time': self.end_time
+        }
